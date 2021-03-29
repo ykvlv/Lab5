@@ -25,13 +25,16 @@ public class SaveCommand implements Command {
         }
         String json = gson.toJson(allFlats);
         try {
-            File file = new File("files/Flats.json");
+            File file = new File(flatHashMap.getName());
             FileOutputStream fos = new FileOutputStream(file);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
             osw.write(json);
             osw.close();
+            System.out.println("Коллекция сохранена.");
+        } catch (FileNotFoundException e) {
+            System.out.println("Доступ к файлу ограничен, сохранение невозможно.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("О черт, разработчик не знает что произошло, но сохранить файл невозможно.");
         }
     }
 

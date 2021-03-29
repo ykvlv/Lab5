@@ -1,15 +1,16 @@
 package command;
 
+import factory.FlatCreator;
 import factory.FlatHashMap;
 import forFlat.Flat;
 
 public class ReplaceIfGreaterCommand implements Command {
     private final FlatHashMap flatHashMap;
-    private final UpdateCommand updateCommand;
+    private final FlatCreator flatCreator;
 
-    public ReplaceIfGreaterCommand(FlatHashMap flatHashMap, UpdateCommand updateCommand) {
+    public ReplaceIfGreaterCommand(FlatHashMap flatHashMap, FlatCreator flatCreator) {
         this.flatHashMap = flatHashMap;
-        this.updateCommand = updateCommand;
+        this.flatCreator = flatCreator;
     }
 
     @Override
@@ -30,10 +31,11 @@ public class ReplaceIfGreaterCommand implements Command {
             throw new IllegalArgumentException("Несуществует элемента с таким key");
         }
         if (value > flat.getArea()) {
-            System.out.printf("Предыдущее значение равно %s%n", flat.getArea());
-            updateCommand.execute(new String[]{String.valueOf(key)});
+            System.out.printf("Предыдущее значение равно %s, замена:%n", flat.getArea());
+            flatHashMap.remove(key);
+            flatHashMap.put(key, flatCreator.createStandardFlat());
         } else {
-            System.out.printf("Настоящее значение %s больше введённого, замена не требуется.%n", flat.getArea());
+            System.out.printf("Настоящее значение %s больше введённого.%n", flat.getArea());
         }
     }
 

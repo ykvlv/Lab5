@@ -13,10 +13,8 @@ public class House {
 
     @Override
     public String toString() {
-        return "House{" +
-                "name='" + name + '\'' +
-                ", year=" + year +
-                ", numberOfLifts=" + numberOfLifts +
-                '}';
+        return ((name == null) ? "" : "Название: " + name) +
+                ((year == null) ? "" : (name == null ? "" : ", ") + "Год: " + year) +
+                ((name == null && year == null) ? "" : ", ") + "Количество лифтов: " + numberOfLifts;
     }
 }

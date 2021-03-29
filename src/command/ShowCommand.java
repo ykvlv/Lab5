@@ -16,10 +16,11 @@ public class ShowCommand implements Command {
     public void execute(String[] params) {
         if (flatHashMap.size() == 0) {
             System.out.println("Коллекция пустая");
-            return;
-        }
-        for (Map.Entry<Integer, Flat> entry : flatHashMap.entrySet()) {
-            System.out.println(entry.getKey() + " : " + entry.getValue().toString());
+        } else {
+            for (Map.Entry<Integer, Flat> entry : flatHashMap.entrySet()) {
+                System.out.println(entry.getKey() + ":");
+                System.out.println(entry.getValue().toString());
+            }
         }
     }
 

@@ -30,18 +30,16 @@ public class Flat implements Comparable<Flat> {
 
     @Override
     public String toString() {
-        return "Flat{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", coordinates=" + coordinates.toString() +
-                ", creationDate=" + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm:ss")) +
-                ", area=" + area +
-                ", numberOfRooms=" + numberOfRooms +
-                ", furnish=" + furnish +
-                ", view=" + view +
-                ", transport=" + transport +
-                ", house=" + house.toString() +
-                '}';
+        return "\tID: " + id +
+                "\n\tДата добавления в список: " + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm:ss")) +
+                "\n\tВладелец: " + name +
+                "\n\tКоординаты: " + coordinates.toString() +
+                "\n\tПлощадь: " + area +
+                "\n\tКоличество комнат: " + numberOfRooms +
+                ((furnish == null) ? "" : "\n\tОтделка: " + furnish) +
+                ((view == null) ? "" : "\n\tВид из окна: " + view) +
+                ((transport == null) ? "" : "\n\tТранспорт: " + transport) +
+                "\n\tИнформация о доме: " + house.toString();
     }
 
     public int getId() {

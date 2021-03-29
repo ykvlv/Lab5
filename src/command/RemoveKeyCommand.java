@@ -12,7 +12,7 @@ public class RemoveKeyCommand implements Command {
     @Override
     public void execute(String[] params) {
         if (params.length != 1) {
-            System.out.println("Первым аргументом вводится key.");
+            System.out.println("usage: remove_key key");
             return;
         }
         int key;

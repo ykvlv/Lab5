@@ -1,37 +1,56 @@
 package factory;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import forFlat.Flat;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class FlatHashMap {
     private HashMap<Integer, Flat> flats;
-    private final String path;
+    private final String name;
+    private final ArrayList<Integer> ids = new ArrayList<>();
     private final LocalDateTime initTime;
 
-    public FlatHashMap(LocalDateTime initTime, String[] args) {
+    public FlatHashMap(LocalDateTime initTime, String[] args) throws Exception {
         this.initTime = initTime;
-        try {
-            File file = new File("files/Flats.json");
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-            String json = "", line;
-            while ((line = br.readLine()) != null) {
-                json = json.concat(line.trim());
+        if (args.length == 0) {
+            System.out.println("Создание новой коллекции");
+            this.name = "New_at_" + initTime.format(DateTimeFormatter.ofPattern("dd.MM.uuuu_HH:mm:ss")) + ".json";
+            flats = new HashMap<>();
+        } else {
+            try {
+                File file = new File(args[0]);
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                String json = "", line;
+                while ((line = br.readLine()) != null) {
+                    json = json.concat(line.trim());
+                }
+                Type itemsHashMapType = new TypeToken<HashMap<Integer, Flat>>() {
+                }.getType();
+                this.flats = new Gson().fromJson(json, itemsHashMapType);
+                System.out.println("Коллекция успешно загружена.");
+            } catch (FileNotFoundException e) {
+                System.out.printf("Файл %s не найден или доступ к нему ограничен%n", args[0]);
+                throw new FileNotFoundException();
+            } catch (JsonParseException e) {
+                System.out.println("Ошибка в парсинге json");
+                throw new JsonParseException("смерть");
+            } catch (IOException e) {
+                System.out.println("О черт, разработчик не знает что произошло, извините программа завершается.");
+                throw new IOException();
             }
-            Type itemsHashMapType = new TypeToken<HashMap<Integer, Flat>>() {}.getType();
-            this.flats = new Gson().fromJson(json, itemsHashMapType);
-        } catch (IOException e) {
-            e.printStackTrace();
-            this.flats = new HashMap<>();
+            this.name = args[0];
+            updateIds();
         }
-        this.path = "none";
     }
 
     public void clear() {
@@ -42,8 +61,15 @@ public class FlatHashMap {
         return initTime;
     }
 
-    public String getPath() {
-        return path;
+    public String getName() {
+        return name;
+    }
+
+    public void updateIds() {
+        ids.clear();
+        for (Map.Entry<Integer, Flat> entry : entrySet()) {
+            ids.add(entry.getValue().getId());
+        }
     }
 
     public int size() {
@@ -68,5 +94,9 @@ public class FlatHashMap {
 
     public Flat get(int key) {
         return flats.get(key);
+    }
+
+    public ArrayList<Integer> getIds() {
+        return ids;
     }
 }

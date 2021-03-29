@@ -12,7 +12,7 @@ public class RemoveLowerKeyCommand implements Command {
     @Override
     public void execute(String[] params) {
         if (params.length != 1) {
-            System.out.println("Первым аргументом вводится key.");
+            System.out.println("usage: remove_lower_key value");
             return;
         }
         int key;
@@ -22,8 +22,7 @@ public class RemoveLowerKeyCommand implements Command {
             System.out.println("Ключ должен быть числом.");
             return;
         }
-
-        flatHashMap.entrySet().removeIf(entry -> entry.getKey() > key);
+        flatHashMap.entrySet().removeIf(entry -> entry.getKey() < key);
     }
 
     @Override

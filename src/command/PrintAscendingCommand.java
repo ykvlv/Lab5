@@ -29,7 +29,8 @@ public class PrintAscendingCommand implements Command {
                         Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
         for (Map.Entry<Integer, Flat> entry : sorted.entrySet()) {
-            System.out.println(entry.getKey() + " : " + entry.getValue().toString());
+            System.out.println(entry.getKey() + ":");
+            System.out.println(entry.getValue().toString());
         }
     }
 

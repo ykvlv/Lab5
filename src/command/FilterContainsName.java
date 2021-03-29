@@ -15,12 +15,13 @@ public class FilterContainsName implements Command {
     @Override
     public void execute(String[] params) {
         if (params.length != 1) {
-            System.out.println("Первым аргументом вводится подстрока.");
+            System.out.println("usage: filter_contains_name name");
             return;
         }
         for (Map.Entry<Integer, Flat> entry : flatHashMap.entrySet()) {
             if (entry.getValue().getName().contains(params[0])) {
-                System.out.println(entry.getKey() + " : " + entry.getValue().toString());
+                System.out.println(entry.getKey() + ":");
+                System.out.println(entry.getValue().toString());
             }
         }
     }

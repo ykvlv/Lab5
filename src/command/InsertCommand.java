@@ -16,7 +16,7 @@ public class InsertCommand implements Command{
     public void execute(String[] params) throws IllegalArgumentException {
         int key;
         if (params.length != 1) {
-            throw new IllegalArgumentException("Первым аргументом вводится key");
+            throw new IllegalArgumentException("usage: insert key");
         } else {
             try {
                 key = Integer.parseInt(params[0]);
@@ -28,7 +28,6 @@ public class InsertCommand implements Command{
             System.out.println("Элемент с данным ключом уже есть в коллекции. Воспользуйтесь \"update\"");
             return;
         }
-        System.out.println("Добавление нового элемента.");
         flatHashMap.put(key, flatCreator.createStandardFlat());
         System.out.println("Элемент добавлен.");
     }

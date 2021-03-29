@@ -12,7 +12,7 @@ public class RemoveGreaterKeyCommand implements Command {
     @Override
     public void execute(String[] params) {
         if (params.length != 1) {
-            System.out.println("Первым аргументом вводится key.");
+            System.out.println("usage: remove_greater_key value");
             return;
         }
         int key;
@@ -23,7 +23,7 @@ public class RemoveGreaterKeyCommand implements Command {
             return;
         }
 
-        flatHashMap.entrySet().removeIf(entry -> entry.getKey() < key);
+        flatHashMap.entrySet().removeIf(entry -> entry.getKey() > key);
     }
 
     @Override

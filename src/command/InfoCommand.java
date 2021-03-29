@@ -15,7 +15,8 @@ public class InfoCommand implements Command {
     public void execute(String[] params) {
         System.out.println("Информация о коллекции:");
         System.out.printf("\tВремя инициализации: %s%n", flatHashMap.getInitTime().format(DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm:ss")));
-        System.out.printf("\tНазвание: %s%n", flatHashMap.getPath());
+        System.out.printf("\tНазвание: %s%n", flatHashMap.getName());
+        System.out.printf("\tКласс: %s%n", flatHashMap.getClass().getSimpleName());
         System.out.printf("\tРазмер: %d%n", flatHashMap.size());
     }
 

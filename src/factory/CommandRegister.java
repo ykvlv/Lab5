@@ -11,9 +11,8 @@ public class CommandRegister {
     private final HashMap<String, Command> commands = new HashMap<>();
 
     public CommandRegister(FlatHashMap flatHashMap, FlatCreator flatCreator) {
-        UpdateCommand updateCommand = new UpdateCommand(flatHashMap, flatCreator);
-        addCommand(new ReplaceIfGreaterCommand(flatHashMap, updateCommand));
-        addCommand(updateCommand);
+        addCommand(new UpdateCommand(flatHashMap, flatCreator));
+        addCommand(new ReplaceIfGreaterCommand(flatHashMap, flatCreator));
         addCommand(new HelpCommand(this));
         addCommand(new InfoCommand(flatHashMap));
         addCommand(new ShowCommand(flatHashMap));
@@ -21,7 +20,7 @@ public class CommandRegister {
         addCommand(new RemoveKeyCommand(flatHashMap));
         addCommand(new ClearCommand(flatHashMap));
         addCommand(new SaveCommand(flatHashMap));
-        addCommand(new ExecuteScriptCommand(this));
+        addCommand(new ExecuteScriptCommand(this, flatCreator));
         addCommand(new ExitCommand());
         addCommand(new RemoveGreaterKeyCommand(flatHashMap));
         addCommand(new RemoveLowerKeyCommand(flatHashMap));
