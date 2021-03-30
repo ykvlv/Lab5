@@ -57,7 +57,7 @@ public class FlatCreator {
     private String requestName() {
         String name;
         do {
-            System.out.printf(userInput ? "Название квартиры:%n" : "");
+            System.out.printf(userInput ? "Имя владельца квартиры:%n" : "");
             name = scanner.nextLine().trim();
         } while (name.equals(""));
         return name;
@@ -77,7 +77,7 @@ public class FlatCreator {
                 } else if (x >= 39) {
                     System.out.printf(userInput ? "X должен быть меньше 39. Введите X и Y:%n" : "");
                 } else if (x <= 0 || y <= 0) {
-                    System.out.printf(userInput ? "X или Y не могут быть отрицательными. Повторите попытку:%n" : "");
+                    System.out.printf(userInput ? "X или Y должны быть больше 0. Повторите попытку:%n" : "");
                 } else {
                     break;
                 }
@@ -97,7 +97,7 @@ public class FlatCreator {
                 if (area > 669) {
                     System.out.printf(userInput ? "Площадь не может быть больше 668. Повтори попытку:%n" : "");
                 } else if (area <= 0) {
-                    System.out.printf(userInput ? "Отрицательная площадь? Ты в каком измерении живешь? Введи площадь квартиры больше 0:%n" : "");
+                    System.out.printf(userInput ? "Введите площадь квартиры больше 0:%n" : "");
                 } else {
                     break;
                 }
