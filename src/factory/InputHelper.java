@@ -34,14 +34,16 @@ public class InputHelper {
 
     public Long requestLong(boolean mayBeNull) {
         long l;
+        String string;
         while (true) {
             try {
-                l = Long.parseLong(scanner.nextLine().trim());
-                return l;
-            } catch (NumberFormatException e) {
-                if (mayBeNull) {
+                string = scanner.nextLine().trim();
+                if (string.equals("") && mayBeNull) {
                     return null;
                 }
+                l = Long.parseLong(string);
+                return l;
+            } catch (NumberFormatException e) {
                 System.out.println("Ошибка парсинга числа");
             }
         }
