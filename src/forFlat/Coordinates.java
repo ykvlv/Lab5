@@ -1,8 +1,9 @@
 package forFlat;
 
 public class Coordinates {
-    private long x; //Максимальное значение поля: 38
-    private float y;
+    public static long MAX_X = 38;
+    private final long x;
+    private final float y;
 
     public Coordinates(long x, float y) {
         this.x = x;

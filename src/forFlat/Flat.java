@@ -4,16 +4,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Flat implements Comparable<Flat> {
-    private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates; //Поле не может быть null
-    private LocalDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private Float area; //Максимальное значение поля: 668, Значение поля должно быть больше 0
-    private Integer numberOfRooms; //Значение поля должно быть больше 0
-    private Furnish furnish; //Поле может быть null
-    private View view; //Поле может быть null
-    private Transport transport; //Поле может быть null
-    private House house; //Поле не может быть null
+    private final int id;
+    private final String name; //Поле НЕ может быть null
+    private final Coordinates coordinates; //Поле НЕ может быть null
+    private final LocalDateTime creationDate; //Поле НЕ может быть null
+    public static Float MIN_AREA = 0F;
+    public static Float MAX_AREA = 668F;
+    private final Float area;
+    public static Integer MIN_NUMBER_OF_ROOMS = 0;
+    private final Integer numberOfRooms;
+    private final Furnish furnish; //Поле может быть null
+    private final View view; //Поле может быть null
+    private final Transport transport; //Поле может быть null
+    private final House house; //Поле не может быть null
 
     public Flat(int id, String name, Coordinates coordinates, LocalDateTime creationDate, Float area, Integer numberOfRooms, Furnish furnish, View view, Transport transport, House house) {
         this.id = id;

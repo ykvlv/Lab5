@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class FlatHashMap {
-    private HashMap<Integer, Flat> flats;
+    private final HashMap<Integer, Flat> flats;
     private final String name;
     private final ArrayList<Integer> ids = new ArrayList<>();
     private final LocalDateTime initTime;
@@ -45,7 +45,7 @@ public class FlatHashMap {
                 System.out.println("Ошибка в парсинге json");
                 throw new JsonParseException("смерть");
             } catch (IOException e) {
-                System.out.println("О черт, разработчик не знает что произошло, извините программа завершается.");
+                System.out.println("Ошибка ввода вывода, извините программа завершается.");
                 throw new IOException();
             }
             this.name = args[0];

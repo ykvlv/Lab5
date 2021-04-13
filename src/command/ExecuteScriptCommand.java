@@ -1,7 +1,7 @@
 package command;
 
 import factory.CommandRegister;
-import factory.FlatCreator;
+import factory.InputHelper;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,11 +10,11 @@ import java.util.Scanner;
 public class ExecuteScriptCommand implements Command {
     private final CommandRegister cr;
     private final ArrayList<String> nowExecuting = new ArrayList<>();
-    private final FlatCreator flatCreator;
+    private final InputHelper inputHelper;
 
-    public ExecuteScriptCommand(CommandRegister cr, FlatCreator flatCreator) {
+    public ExecuteScriptCommand(CommandRegister cr, InputHelper inputHelper) {
         this.cr = cr;
-        this.flatCreator = flatCreator;
+        this.inputHelper = inputHelper;
     }
 
     @Override
@@ -31,16 +31,14 @@ public class ExecuteScriptCommand implements Command {
                 return;
             }
             nowExecuting.add(params[0]);
-            flatCreator.setScriptScanner(scriptScanner);
-            flatCreator.setUserInput(false);
+            inputHelper.setScriptMode(scriptScanner);
             String line;
-            while (scriptScanner.hasNext()) {
-                line = scriptScanner.nextLine();
-                System.out.println(line);
+            while (inputHelper.hasNext()) {
+                line = inputHelper.nextLine();
                 cr.decryptAndRun(line);
             }
             nowExecuting.remove(params[0]);
-            flatCreator.setUserInput(true);
+            inputHelper.endScriptMode();
         } catch (IOException e) {
             System.out.println("Ошибка с чтением файла");
         }

@@ -10,7 +10,7 @@ import java.util.Map;
 public class CommandRegister {
     private final HashMap<String, Command> commands = new HashMap<>();
 
-    public CommandRegister(FlatHashMap flatHashMap, FlatCreator flatCreator) {
+    public CommandRegister(FlatHashMap flatHashMap, FlatCreator flatCreator, InputHelper inputHelper) {
         addCommand(new UpdateCommand(flatHashMap, flatCreator));
         addCommand(new ReplaceIfGreaterCommand(flatHashMap, flatCreator));
         addCommand(new HelpCommand(this));
@@ -20,7 +20,7 @@ public class CommandRegister {
         addCommand(new RemoveKeyCommand(flatHashMap));
         addCommand(new ClearCommand(flatHashMap));
         addCommand(new SaveCommand(flatHashMap));
-        addCommand(new ExecuteScriptCommand(this, flatCreator));
+        addCommand(new ExecuteScriptCommand(this, inputHelper));
         addCommand(new ExitCommand());
         addCommand(new RemoveGreaterKeyCommand(flatHashMap));
         addCommand(new RemoveLowerKeyCommand(flatHashMap));
@@ -43,11 +43,7 @@ public class CommandRegister {
         String[] params = Arrays.copyOfRange(commandAndParams, 1, commandAndParams.length);
 
         if (commands.containsKey(command)) {
-            try {
-                commands.get(command).execute(params);
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
+            commands.get(command).execute(params);
         } else {
             System.out.printf("Команды нет в списке, %s%n", possibleCommand(command));
         }
