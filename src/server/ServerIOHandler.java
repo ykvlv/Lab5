@@ -1,35 +1,35 @@
 package server;
 
-import common.Request;
+import common.Data;
 
 import java.io.*;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 
-public class DeliveryHandlerNIO {
+public class ServerIOHandler {
     private final ByteBuffer byteBuffer = ByteBuffer.allocate(8192);
 
-    public Request readFrom(DatagramChannel channel) throws IOException, ClassNotFoundException {
+    public Data readFrom(DatagramChannel channel) throws IOException, ClassNotFoundException {
         byteBuffer.clear();
         SocketAddress address = channel.receive(byteBuffer);
         if (address != null) {
             ByteArrayInputStream byteArrayIS = new ByteArrayInputStream(byteBuffer.array());
             ObjectInputStream objectIS = new ObjectInputStream(byteArrayIS);
-            Request request = (Request) objectIS.readObject();
-            request.setAddress(address);
+            Data aData = (Data) objectIS.readObject();
             objectIS.close();
             byteArrayIS.close();
-            return request;
+            aData.setAddress(address);
+            return aData;
         }
         return null;
     }
 
-    public void writeTo(Request request, DatagramChannel channel, SocketAddress address) throws IOException {
+    public void writeTo(Data aData, DatagramChannel channel, SocketAddress address) throws IOException {
         byteBuffer.clear();
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
         ObjectOutputStream objectOS = new ObjectOutputStream(byteArrayOS);
-        objectOS.writeObject(request);
+        objectOS.writeObject(aData);
         byteBuffer.put(byteArrayOS.toByteArray());
         byteBuffer.flip();
         channel.send(byteBuffer, address);

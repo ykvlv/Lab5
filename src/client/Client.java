@@ -1,25 +1,23 @@
 package client;
 
-import common.Request;
+import common.Data;
 
 import java.io.IOException;
 
 public class Client {
     private final DeliveryHandlerIO deliveryHandlerIO;
     private final InputHelper inputHelper;
-    private final String fileName;
     private final RequestHandler requestHandler;
 
-    public Client(DeliveryHandlerIO deliveryHandlerIO, InputHelper inputHelper, String fileName, RequestHandler requestHandler) {
+    public Client(DeliveryHandlerIO deliveryHandlerIO, InputHelper inputHelper, RequestHandler requestHandler) {
         this.deliveryHandlerIO = deliveryHandlerIO;
         this.requestHandler = requestHandler;
         this.inputHelper = inputHelper;
-        this.fileName = fileName;
     }
 
     public void run() throws IOException, ClassNotFoundException {
         try {
-            deliveryHandlerIO.connectTo(fileName);
+            deliveryHandlerIO.connectTo();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Подключение к серверу не удалось.");
         }
@@ -29,8 +27,8 @@ public class Client {
             System.out.print("% ");
             args = inputHelper.nextLine().trim();
             deliveryHandlerIO.sendCommand(args);
-            Request request = deliveryHandlerIO.read();
-            requestHandler.process(request, args);
+            Data aData = deliveryHandlerIO.read();
+            requestHandler.process(aData, args);
         } while (!args.equals("exit"));
     }
 }

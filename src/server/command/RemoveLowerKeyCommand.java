@@ -20,7 +20,7 @@ public class RemoveLowerKeyCommand implements Command {
         } catch (NumberFormatException e) {
             return "Ключ должен быть числом.";
         }
-        flatHashMap.entrySet().removeIf(entry -> entry.getKey() < key);
+        flatHashMap.getFlats().removeIf(entry -> entry.getKey() < key);
         return "Удаление прошло успешно";
     }
 

@@ -22,7 +22,7 @@ public class UpdateCommand implements Command {
         if (!flatHashMap.containsKey(key)) {
             return "Элемента с данным ключом нет в коллекции. Воспользуйтесь \"insert\"";
         }
-        flatHashMap.remove(key);
+
         return "Добавление..";
     }
 

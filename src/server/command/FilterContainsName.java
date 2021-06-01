@@ -16,7 +16,7 @@ public class FilterContainsName implements Command {
         if (params.length != 1) {
             return "usage: filter_contains_name name";
         }
-        Optional<String> string = flatHashMap.entrySet().stream()
+        Optional<String> string = flatHashMap.getFlats().stream()
                 .filter(x -> x.getValue()
                         .getName()
                         .contains(params[0]))

@@ -8,19 +8,13 @@ public class Main {
         int port = 1305;
         String fileName;
         try {
-            fileName = args[0];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Первым аргументом введите название коллекции.");
-            return;
-        }
-        try {
-            port = Integer.parseInt(args[1]);
+            port = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
             System.out.println("Ошибка парсинга порта. Подключение по стандартному.");
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Порт не задан. Подключение по стандартному.");
         }
-        System.out.printf("Подключение к коллекции %s по порту %s%n", fileName, port);
+        System.out.printf("Подключение к коллекции по порту %s%n", port);
 
         SocketAddress address = new InetSocketAddress(InetAddress.getLocalHost(), port);
         DatagramSocket socket = new DatagramSocket();
@@ -31,7 +25,7 @@ public class Main {
         FlatCreator flatCreator = new FlatCreator(inputHelper);
         DeliveryHandlerIO deliveryHandlerIO = new DeliveryHandlerIO(address, socket);
         RequestHandler requestHandler = new RequestHandler(deliveryHandlerIO, flatCreator, inputHelper);
-        Client client = new Client(deliveryHandlerIO, inputHelper, fileName, requestHandler);
+        Client client = new Client(deliveryHandlerIO, inputHelper, requestHandler);
 
         try {
             client.run();

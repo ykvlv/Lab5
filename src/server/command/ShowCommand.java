@@ -13,7 +13,7 @@ public class ShowCommand implements Command {
 
     @Override
     public String execute(String[] params) {
-        Optional<String> string = flatHashMap.entrySet().stream()
+        Optional<String> string = flatHashMap.getFlats().stream()
                 .map(x -> x.getKey() + ":\n" + x.getValue().toString())
                 .reduce((x, y) -> x + "\n" + y);
         return string.orElse("Коллекция пустая.");

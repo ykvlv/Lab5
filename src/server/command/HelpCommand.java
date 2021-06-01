@@ -14,7 +14,7 @@ public class HelpCommand implements Command{
 
     @Override
     public String execute(String[] params) {
-        Optional<String> string = cr.getAllCommands().entrySet().stream()
+        Optional<String> string = cr.getCommands().entrySet().stream()
                 .map(x -> new Formatter().format("\n\t%-25s%s", x.getKey(), x.getValue()).toString())
                 .reduce((x, y) -> x + y);
         return "Команды для работы с программой:" + string.orElse("Команд нет.");

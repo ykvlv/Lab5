@@ -10,17 +10,14 @@ import java.util.Map;
 
 public class CommandRegister {
     private final HashMap<String, Command> commands = new HashMap<>();
-    private final String name;
-    private final FlatHashMap flatHashMap;
 
-    public CommandRegister(String name, FlatHashMap flatHashMap) {
-        this.name = name;
-        addCommand(new UpdateCommand(flatHashMap));
-        addCommand(new ReplaceIfGreaterCommand(flatHashMap));
+    public CommandRegister(FlatHashMap flatHashMap, ServerIOHandler serverIOHandler) {
+        addCommand(new UpdateCommand(flatHashMap, serverIOHandler));
+        addCommand(new ReplaceIfGreaterCommand(flatHashMap, serverIOHandler));
         addCommand(new HelpCommand(this));
         addCommand(new InfoCommand(flatHashMap));
         addCommand(new ShowCommand(flatHashMap));
-        addCommand(new InsertCommand(flatHashMap));
+        addCommand(new InsertCommand(flatHashMap, serverIOHandler));
         addCommand(new RemoveKeyCommand(flatHashMap));
         addCommand(new ClearCommand(flatHashMap));
         addCommand(new ExecuteScriptCommand());
@@ -30,12 +27,11 @@ public class CommandRegister {
         addCommand(new FilterContainsName(flatHashMap));
         addCommand(new PrintAscendingCommand(flatHashMap));
         addCommand(new PrintDescendingCommand(flatHashMap));
-        this.flatHashMap = flatHashMap;
     }
 
     private void addCommand(Command command) {
         if (commands.containsKey(command.name())) {
-            throw new IllegalArgumentException("Две команды с одинаковым названием");
+            System.out.println("Имеются команды с одинаковым названием");
         } else {
             commands.put(command.name(), command);
         }
@@ -53,25 +49,8 @@ public class CommandRegister {
         }
     }
 
-    public String add(Integer key, Flat flat) {
-        flatHashMap.put(key, flat);
-        return "Добавлен элемент с ключом " + key;
-    }
-
-    public FlatHashMap getMap() {
-        return flatHashMap;
-    }
-
-    public HashMap<String, String> getAllCommands() {
-        HashMap<String, String> allCommands = new HashMap<>();
-        for (Map.Entry<String, Command> entry : commands.entrySet()) {
-            allCommands.put(entry.getKey(), entry.getValue().shortInfo());
-        }
-        return allCommands;
-    }
-
-    public String getName() {
-        return name;
+    public HashMap<String, Command> getCommands() {
+        return commands;
     }
 
     private String possibleCommand(String name) {

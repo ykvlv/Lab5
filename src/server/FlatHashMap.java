@@ -14,23 +14,22 @@ import java.util.Set;
 
 public class FlatHashMap {
     private final HashMap<Integer, Flat> flats;
-    private final String name;
+    private final String fileName;
     private final ArrayList<Integer> ids = new ArrayList<>();
     private final LocalDateTime initTime;
 
-    public FlatHashMap(LocalDateTime initTime, String name) throws IOException {
+    public FlatHashMap(LocalDateTime initTime, String fileName) throws IOException {
         this.initTime = initTime;
-        File file = new File(name.trim());
+        this.fileName = fileName;
+        File file = new File(fileName.trim());
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-        String json = "", line;
-        while ((line = br.readLine()) != null) {
-            json = json.concat(line.trim());
+        String json = "";
+        while (br.ready()) {
+            json = json.concat(br.readLine().trim());
         }
         Type itemsHashMapType = new TypeToken<HashMap<Integer, Flat>>() {}.getType();
-        this.flats = new Gson().fromJson(json, itemsHashMapType);
-        System.out.println("Коллекция успешно загружена.");
-        this.name = name;
-        updateIds();
+        flats = new Gson().fromJson(json, itemsHashMapType);
+        flats.values().forEach(flat -> ids.add(flat.getId()));
     }
 
     public void clear() {
@@ -41,23 +40,16 @@ public class FlatHashMap {
         return initTime;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void updateIds() {
-        ids.clear();
-        for (Map.Entry<Integer, Flat> entry : entrySet()) {
-            ids.add(entry.getValue().getId());
-        }
+    public String getFileName() {
+        return fileName;
     }
 
     public int size() {
         return flats.size();
     }
 
-    public Set<Map.Entry<Integer, Flat>> entrySet() {
-        return flats.entrySet();
+    public HashMap<Integer, Flat> getFlats() {
+        return flats;
     }
 
     public boolean containsKey(int key) {

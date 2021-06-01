@@ -1,60 +1,65 @@
 package server;
 
-import common.Request;
+import common.Data;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Iterator;
-import java.util.Scanner;
 import java.util.Set;
 
 public class Server {
     private final Selector selector;
-    private final DeliveryHandlerNIO deliveryHandlerNIO;
-    private final RequestExecutor requestExecutor;
+    private final ServerIOHandler serverIOHandler;
+    private final ServerExecutor serverExecutor;
     private final BufferedReader reader;
 
-    public Server(Selector selector, DeliveryHandlerNIO deliveryHandlerNIO, RequestExecutor requestExecutor, BufferedReader reader) {
+    public Server(Selector selector, ServerIOHandler serverIOHandler, ServerExecutor serverExecutor, BufferedReader reader) {
         this.selector = selector;
         this.reader = reader;
-        this.deliveryHandlerNIO = deliveryHandlerNIO;
-        this.requestExecutor = requestExecutor;
+        this.serverIOHandler = serverIOHandler;
+        this.serverExecutor = serverExecutor;
     }
 
-    public void run() throws Exception {
-
-
-
+    public void run() throws IOException, ClassNotFoundException {
         while (true) {
             if (selector.select(1000) == 0) {
                 if (reader.ready()) {
                     String str = reader.readLine();
-                    if (str.equals("save")) {
-                        requestExecutor.saveAll();
-                        return;
-                    } else if (str.equals("exit")) {
-                        return;
+                    switch (str) {
+                        case "save":
+                            serverExecutor.saveAll();
+                            break;
+                        case "exit":
+                            selector.close();
+                            reader.close();
+                            return;
+                        default:
+                            System.out.println("А че ты вводишь то?");
                     }
                 }
+                continue;
             }
+
             Set<SelectionKey> keys = selector.selectedKeys();
             for (Iterator<SelectionKey> it = keys.iterator(); it.hasNext();) {
                 SelectionKey key = it.next();
                 if (key.isValid()) {
                     if (key.isReadable()) {
                         System.out.println("READ");
-                        Request request = deliveryHandlerNIO.readFrom((DatagramChannel) key.channel());
-                        key.attach(request);
+                        Data data = serverIOHandler.readFrom((DatagramChannel) key.channel());
+                        Data responseData = serverExecutor.execute(data);
+
+                        key.attach();
                         key.interestOps(SelectionKey.OP_WRITE);
                     } else if (key.isWritable()) {
                         System.out.println("WRITE");
-                        Request request = (Request) key.attachment();
-                        Request requestButResponse = requestExecutor.execute(request);
+                        Data aData = (Data) key.attachment();
+                        Data dataButResponse = serverExecutor.execute(aData);
 
-                        deliveryHandlerNIO.writeTo(requestButResponse, (DatagramChannel) key.channel(), request.getAddress());
+                        serverIOHandler.writeTo(dataButResponse, (DatagramChannel) key.channel(), aData.getAddress());
                         key.interestOps(SelectionKey.OP_READ);
                     }
                 } else {
